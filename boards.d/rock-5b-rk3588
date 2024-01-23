@@ -1,0 +1,29 @@
+# write uboot
+# We currently hijack images as they are not present on official images
+# And we inject thoses
+echo "= Writing idbloader.img for $TARGET .... on media $MEDIA"
+dd if=$PWD/artifacts/uboot/$TARGET/idbloader.img of=$MEDIA seek=64; sync; sleep 5
+echo "= Writing u-boot FIT image for $TARGET .... on media $MEDIA"
+dd if=$PWD/artifacts/uboot/$TARGET/u-boot.itb of=$MEDIA seek=16384; sync; sleep 5
+# set console for Rockchips
+SYSCON=ttyS2,1500000n8
+
+# image exists
+if [ "$IMAGE" != "" ]; then
+    # Enforce DTB file on conf for initial boot
+    echo "= Force device tree in bootloader configuration for first boot"
+    DTB_PATH="\/dtb\/rockchip\/rk3588-rock-5b.dtb"
+    for bls in /tmp/boot/loader/entries/*.conf; do
+        sed -i "s/options/devicetree $DTB_PATH\noptions/g" ${bls}
+    done
+fi
+
+echo "= Changing default DTB in grub config"
+echo "GRUB_DEFAULT_DTB=\"/dtb/rockchip/rk3588-rock-5b.dtb\"" >> ${PREFIX}/etc/default/grub
+
+echo "= Copying kernel packages"
+cp $PWD/artifacts/kernel/* $PREFIX/root/
+
+echo "= Copying mali_csffw.bin fw"
+mkdir -p $PREFIX/usr/lib/firmware/arm/mali/arch10.8/
+cp $PWD/artifacts/fw/mali_csffw.bin $PREFIX/usr/lib/firmware/arm/mali/arch10.8/
