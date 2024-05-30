@@ -637,7 +637,7 @@ fi
 # mary: Fixup for current clock issues
 if [ "$TARGET" = "rock-5b-rk3588" ]; then
 	echo "= Working around Rock 5B clock issues"
-	add_kernel_parameter "ignore_loglevel clk_ignore_unused modules-load=clk_scmi"
+	add_kernel_parameter "ignore_loglevel clk_ignore_unused modules-load=clk_scmi module_blacklist=fusb302"
 fi
 
 # check if host system has selinux disabled, if it does autorelabel is required
