@@ -20,10 +20,3 @@ fi
 
 echo "= Changing default DTB in grub config"
 echo "GRUB_DEFAULT_DTB=\"/dtb/rockchip/rk3588-rock-5b.dtb\"" >> ${PREFIX}/etc/default/grub
-
-echo "= Copying kernel packages"
-cp $PWD/artifacts/kernel/* $PREFIX/root/
-
-echo "= Copying mali_csffw.bin fw"
-mkdir -p $PREFIX/usr/lib/firmware/arm/mali/arch10.8/
-cp $PWD/artifacts/fw/mali_csffw.bin $PREFIX/usr/lib/firmware/arm/mali/arch10.8/
