@@ -20,3 +20,6 @@ fi
 
 echo "= Changing default DTB in grub config"
 echo "GRUB_DEFAULT_DTB=\"/dtb/rockchip/rk3588-rock-5b.dtb\"" >> ${PREFIX}/etc/default/grub
+
+echo "= Enforcing clk_scmi to load at boot"
+echo "clk_scmi" > ${PREFIX}/etc/modules-load.d/scmi.conf
